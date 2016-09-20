@@ -19,6 +19,17 @@ This calculator can help applicants make informed decisions around the ISA and L
 Changing variables, like salary and amount of stipend, can result in thousands of dollars of difference in the amount of tuition paid.
 
 
+## Specs
+- [ ] Data is presented visually
+- [ ] User can visualize the percentage of their gross income being paid as tuition
+- [ ] User is presented with some pre-populated data
+- [ ] User can define what their starting salary is
+- [ ] User can toggle Living ISA
+- [ ] User can toggle Laptop ISA
+- [ ] The artifact produced is properly licensed, preferably with the [MIT license][mit-license].
+
+
+
 
 ## Required Specs (Must Have)
 
