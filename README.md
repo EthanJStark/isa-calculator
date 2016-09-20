@@ -28,35 +28,13 @@ Changing variables, like salary and amount of stipend, can result in thousands o
 - [ ] User can toggle Laptop ISA
 - [ ] The artifact produced is properly licensed, preferably with the [MIT license][mit-license].
 
-
-
-
-## Required Specs (Must Have)
-
-- [ ] User can select variables (like income and stipend) with buttons or forms.
-- [ ] User can define what their starting salary is
-- [ ] User can define what their annual raise is
-- [ ] User can specify how much stipend they want. For every 100 dollars in stipend their stipend percentage should go up 
-- [ ] User should see their full amount paid back
-- [ ] User should see their full amount paid back adjusted for cost of capital (which defaults to 8%)
-- [ ] User should be able to adjust cost of capital percentage
-- [ ] User should click on refresh button and have all output refreshed
-- [ ] The app will display labeled variables (e.g. Starting Salary: $80,000)
-- [ ] These labeled variables will be visually, linearly displayed to communicate the math being done
-- [ ] The artifact produced is properly licensed, preferably with the [MIT license][mit-license].
-
-## Optional Specs (Nice To Have)
-- [ ] The app is responsive and mobile-friendly.
-- [ ] Calculator includes an annual raise variable that defaults to 5%
-- [ ] The app compares ISA outcomes with upfront tuition.
-- [ ] Variables will have (?) hover links to provide more background about the components of the ISA and stipend.
-- [ ] Team has interviewed at least three potential users about features and UX.
-- [ ] Auto update
-- [ ] Save the sheet
-- [ ] Print out report
-- [ ] Uses same UI elements + Bootstrap theme of Learnersguild.org (link will be provided)
-
-
+## Quality Rubric
+- [ ] UX and UI are informed by accesability best practices
+- [ ] User-Friendly - Pages load fast, styled enough to not offend the eye
+- [ ] Functional - Project runs in localhost
+- [ ] Clearly Named - Functions, variables, files, CSS classes and ids
+- [ ] Git Logged - Readable and clean with clear, complete, professional commit messages
+- [ ] Not Commented - Unless truly necessary.
 
 
 
