@@ -27,17 +27,28 @@ var calculator = {
   calculate: function() {
     config.data.datasets = [];
 
-    var newDataset = {
-      label: 'Dataset ' + config.data.datasets.length,
-      borderColor: randomColor(0.4),
-      backgroundColor: randomColor(0.5),
-      pointBorderColor: randomColor(0.7),
-      pointBackgroundColor: randomColor(0.5),
-      pointBorderWidth: 1,
-      data: this.takeHomeArray(this.userConfig.xAxis),
+    var newDataset = {};
+    for (var iterator in this.userConfig) {
+      if (this.userConfig[iterator].theBool === true) {
+        var newData = [];
+        for (var xVal = 0; xVal < this.userConfig.xAxis.length; xVal++ )
+        {
+          newData.push( Math.ceil(this.userConfig.xAxis[xVal] * this.userConfig[iterator].value * 1000) / 1000)
+        }
+        newDataset = {
+          label: iterator,
+          borderColor: randomColor(0.4),
+          backgroundColor: randomColor(0.5),
+          pointBorderColor: randomColor(0.7),
+          pointBackgroundColor: randomColor(0.5),
+          pointBorderWidth: 1,
+          data: newData,
+          //this.takeHomeArray(this.userConfig.xAxis),
+        }
+        config.data.datasets.push(newDataset);
+      }
     }
 
-    config.data.datasets.push(newDataset);
     window.myLine.update();
   },
   takeHomePercentage: function() {
@@ -148,9 +159,11 @@ window.onload = function() {
   window.myLine = new Chart(ctx, config);
 };
 
-/*  RANDOMIZE
+
 $('#randomizeData').click(function() {
-  $.each(config.data.datasets, function(i, dataset) {
+  calculator.calculate();
+});
+  /*$.each(config.data.datasets, function(i, dataset) {
     dataset.data = dataset.data.map(function() {
       return randomScalingFactor();
     });
