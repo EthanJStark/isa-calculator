@@ -17,10 +17,21 @@ var calculator = {
   },
   takeHomeArray: function ( arr ) {
     var takeHomeArr = []
+    var temp
     for ( var i = 0; i < arr.length; i++ ) {
-      takeHomeArr.push(arr[i])
+      temp = this.takeHome(arr[i])
+      takeHomeArr.push(temp)
     }
     return takeHomeArr
+  },
+  tuitionArray: function ( arr ) {
+    var tuitionArr = []
+    var temp
+    for ( var i = 0; i < arr.length; i++ ) {
+      temp = this.tuition(arr[i])
+      tuitionArr.push(temp)
+    }
+    return tuitionArr
   }
 }
 
