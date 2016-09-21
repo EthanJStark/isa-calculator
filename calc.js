@@ -8,62 +8,50 @@ var randomColor = function(opacity) {
   return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '1') + ')';
 };
 
-var toggleConfig = {
+var calculator = {
+  toggleConfig: {
     Stipend: {
-        theBool: true,
-        value: (1 - 0.925)
+      theBool: true,
+      value: (1 - 0.925)
     }, // should be 7.5%
     ISA: {
-        theBool: true,
-        value: (1 - 0.875)
+      theBool: true,
+      value: (1 - 0.875)
     }, // should be 12.5%
     Laptop: {
-        theBool: false,
-        value: (1 - 0.99)
+      theBool: false,
+      value: (1 - 0.99)
     }, // should be 1%
-};
-
-function calcTotalPercentage (thisToggleConfig)
-{
-    var runningTotalPercent = 0;
-    for (var iterator in toggleConfig)
-    {
-        //console.log("\n" + toggleConfig[iterator].theBool);
-        if( toggleConfig[iterator].theBool === true )
-        {
-            // Turn it into a whole number with 1 extra digit of precision (e.g. 7.5%), round it, then turn it back into a percentage.
-            runningTotalPercent = Math.ceil( ( runningTotalPercent + toggleConfig[iterator].value) * 1000 ) / 1000;
-            //console.log("runningTotalPercent = " + runningTotalPercent + ", thisValue is: " + toggleConfig[iterator].value);
-        }
-    }
-    return runningTotalPercent
-}
-
-var calculator = {
-  takeHome: function ( salary, myToggleConfig ) {
-      for (var iterator in toggleConfig)
-      {
-          if( iterator.bool === true )
-            console.log("Item:" + iterator + " is true");
-      }
-    return salary;
   },
-  tuition: function ( salary ) {
+  takeHomePercentage: function() {
+    var runningTotalPercent = 0;
+    for (var iterator in this.toggleConfig) {
+      if (this.toggleConfig[iterator].theBool === true) {
+        // Turn it into a whole number with 1 extra digit of precision (e.g. 7.5%), round it, then turn it back into a percentage.
+        runningTotalPercent = Math.ceil((runningTotalPercent + this.toggleConfig[iterator].value) * 1000) / 1000;
+      }
+    }
+    return 1 - runningTotalPercent;
+  },
+  takeHome: function(salary) {
+    return salary * this.takeHomePercentage(this.toggleConfig)
+  },
+  tuition: function(salary) {
     return salary * 0.125
   },
-  takeHomeArray: function ( arr ) {
+  takeHomeArray: function(arr) {
     var takeHomeArr = []
     var temp
-    for ( var i = 0; i < arr.length; i++ ) {
+    for (var i = 0; i < arr.length; i++) {
       temp = this.takeHome(arr[i])
       takeHomeArr.push(temp)
     }
     return takeHomeArr
   },
-  tuitionArray: function ( arr ) {
+  tuitionArray: function(arr) {
     var tuitionArr = []
     var temp
-    for ( var i = 0; i < arr.length; i++ ) {
+    for (var i = 0; i < arr.length; i++) {
       temp = this.tuition(arr[i])
       tuitionArr.push(temp)
     }
@@ -74,25 +62,24 @@ var calculator = {
 var config = {
   type: 'line',
   data: {
-      // labels is the x-axis data-point labels
+    // labels is the x-axis data-point labels
     //labels: ["January", "February", "March", "April", "May", "June", "July"],
     labels: [40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000],
-    xAxis: [ 40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000 ],
+    xAxis: [40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000],
     datasets: [{
       label: "Sample 1",
-      data: [1,5,15,40,100,250],
+      data: [1, 5, 15, 40, 100, 250],
     }, {
       label: "Sample 2",
-      data: [1,5,15,40,100,250]
-      }
-    ]
+      data: [1, 5, 15, 40, 100, 250]
+    }]
   },
   options: {
     responsive: true,
-    title:{
-      display:true,
+    title: {
+      display: true,
       // MAIN HEAD TITLE
-      text:"Chart.js Line Chart - Stacked Area"
+      text: "Chart.js Line Chart - Stacked Area"
     },
     tooltips: {
       mode: 'label',
