@@ -7,10 +7,54 @@ var randomColorFactor = function() {
 var randomColor = function(opacity) {
   return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '1') + ')';
 };
+/*
+ISA - 12.5
+Laptop - 1
+Stipened - 7.5
+
+*/
+
+var toggleConfig = {
+    Stipend: {
+        theBool: true,
+        value: (1 - 0.925)
+    }, // should be 7.5%
+    ISA: {
+        theBool: true,
+        value: (1 - 0.875)
+    }, // should be 12.5%
+    Laptop: {
+        theBool: false,
+        value: (1 - 0.99)
+    }, // should be 1%
+};
+
+//console.log(toggleConfig.length)
+
+function calcTotalPercentage (thisToggleConfig)
+{
+    var runningTotalPercent = 0;
+    for (var iterator in toggleConfig)
+    {
+        //console.log("\n" + toggleConfig[iterator].theBool);
+        if( toggleConfig[iterator].theBool === true )
+        {
+            // Turn it into a whole number with 1 extra digit of precision (e.g. 7.5%), round it, then turn it back into a percentage.
+            runningTotalPercent = Math.ceil( ( runningTotalPercent + toggleConfig[iterator].value) * 1000 ) / 1000;
+            //console.log("runningTotalPercent = " + runningTotalPercent + ", thisValue is: " + toggleConfig[iterator].value);
+        }
+    }
+    return runningTotalPercent
+}
 
 var calculator = {
-  takeHome: function ( salary ) {
-    return salary * 0.875
+  takeHome: function ( salary, myToggleConfig ) {
+      for (var iterator in toggleConfig)
+      {
+          if( iterator.bool === true )
+            console.log("Item:" + iterator + " is true");
+      }
+    return salary;
   },
   tuition: function ( salary ) {
     return salary * 0.125
