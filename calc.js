@@ -13,18 +13,20 @@ var calculator = {
     toggles: {
       Stipend: {
         name: "Living Stipend ISA",
-        theBool: true,
-        value: (1 - 0.925)
+        theBool: false,
+        value: (1 - 0.925),
+        max: 27692,
       }, // should be 7.5%
       Tuition: {
         name: "Program ISA",
-        theBool: true,
-        value: (1 - 0.875)
+        theBool: false,
+        value: (1 - 0.875),
+        max: 59500,
       }, // should be 12.5%
       Laptop: {
         name: "Laptop purchase ISA",
         theBool: false,
-        value: (1 - 0.99)
+        value: (1 - 0.99),
       }, // should be 1%
     },
     xAxis: [40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000],
@@ -37,7 +39,7 @@ var calculator = {
       if (this.userConfig.toggles[iterator].theBool === true) {
         var newData = [];
         for (var xVal = 0; xVal < this.userConfig.xAxis.length; xVal++) {
-          newData.push(Math.ceil(this.userConfig.xAxis[xVal] * this.userConfig.toggles[iterator].value * 1000) / 1000)
+          newData.push(Math.ceil(this.userConfig.xAxis[xVal] * this.userConfig.toggles[iterator].value * 1000) / 1000 * 3)
         }
         newDataset = {
           label: iterator,
@@ -53,6 +55,12 @@ var calculator = {
       }
     }
 
+    // Baseline (never ceases to exist)
+    config.data.datasets.push({
+      label: "Take-home Pay",
+      data: calculator.takeHomeArray(calculator.userConfig.xAxis)
+    });
+
     window.myLine.update();
   },
   takeHomePercentage: function() {
@@ -66,11 +74,8 @@ var calculator = {
     return 1 - runningTotalPercent;
   },
   takeHome: function(salary) {
-    return salary * this.takeHomePercentage(this.userConfig.toggles)
+    return salary * this.takeHomePercentage(this.userConfig.toggles) * 3
   },
-  /*tuition: function(salary) {
-    return salary * 0.125
-  },*/
   tuition: function(salary) {
     var runningTotalPercent = 0;
     for (var iterator in this.userConfig.toggles) {
@@ -113,8 +118,9 @@ var calculator = {
 
 })();
 
+
 $("#box0").change(function() {
-  if (calculator.userConfig.toggles.Stipend.theBool === false) {
+  if (document.getElementById('box0').checked) {
     calculator.userConfig.toggles.Stipend.theBool = true;
   } else {
     calculator.userConfig.toggles.Stipend.theBool = false;
@@ -122,6 +128,23 @@ $("#box0").change(function() {
   calculator.calculate();
 });
 
+$("#box1").change(function() {
+  if (document.getElementById('box1').checked) {
+    calculator.userConfig.toggles.Tuition.theBool = true;
+  } else {
+    calculator.userConfig.toggles.Tuition.theBool = false;
+  }
+  calculator.calculate();
+});
+
+$("#box2").change(function() {
+  if (document.getElementById('box2').checked) {
+    calculator.userConfig.toggles.Laptop.theBool = true;
+  } else {
+    calculator.userConfig.toggles.Laptop.theBool = false;
+  }
+  calculator.calculate();
+});
 
 var config = {
   type: 'line',
@@ -154,14 +177,14 @@ var config = {
       xAxes: [{
         scaleLabel: {
           display: true,
-          labelString: 'Income'
+          labelString: 'Annual Income'
         }
       }],
       yAxes: [{
         stacked: true,
         scaleLabel: {
           display: true,
-          labelString: 'Gross'
+          labelString: 'Amount Paid (3 YR)'
         }
       }]
     }
