@@ -7,12 +7,6 @@ var randomColorFactor = function() {
 var randomColor = function(opacity) {
   return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '1') + ')';
 };
-/*
-ISA - 12.5
-Laptop - 1
-Stipened - 7.5
-
-*/
 
 var toggleConfig = {
     Stipend: {
@@ -28,8 +22,6 @@ var toggleConfig = {
         value: (1 - 0.99)
     }, // should be 1%
 };
-
-//console.log(toggleConfig.length)
 
 function calcTotalPercentage (thisToggleConfig)
 {
