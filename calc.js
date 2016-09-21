@@ -9,6 +9,19 @@ var randomColor = function(opacity) {
 };
 
 var calculator = {
+  takeHome: function ( salary ) {
+    return salary * 0.875
+  },
+  tuition: function ( salary ) {
+    return salary * 0.125
+  },
+  takeHomeArray: function ( arr ) {
+    var takeHomeArr = []
+    for ( var i = 0; i < arr.length; i++ ) {
+      takeHomeArr.push(arr[i])
+    }
+    return takeHomeArr
+  }
 }
 
 var config = {
@@ -16,7 +29,8 @@ var config = {
   data: {
       // labels is the x-axis data-point labels
     //labels: ["January", "February", "March", "April", "May", "June", "July"],
-    labels: ["$50k", "$60k", "$70k", "$80k", "$90k", "$100k", "$110k"],
+    labels: [40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000],
+    xAxis: [ 40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000 ],
     datasets: [{
       label: "Sample 1",
       data: [1,5,15,40,100,250],
