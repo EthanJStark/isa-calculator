@@ -9,7 +9,7 @@ var randomColor = function(opacity) {
 };
 
 var calculator = {
-  toggleConfig: {
+  userConfig: {
     Stipend: {
       theBool: true,
       value: (1 - 0.925)
@@ -22,22 +22,49 @@ var calculator = {
       theBool: false,
       value: (1 - 0.99)
     }, // should be 1%
+    xAxis: [40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000],
+  },
+  calculate: function() {
+    config.data.datasets = [];
+
+    var newDataset = {
+      label: 'Dataset ' + config.data.datasets.length,
+      borderColor: randomColor(0.4),
+      backgroundColor: randomColor(0.5),
+      pointBorderColor: randomColor(0.7),
+      pointBackgroundColor: randomColor(0.5),
+      pointBorderWidth: 1,
+      data: this.takeHomeArray(this.userConfig.xAxis),
+    }
+
+    config.data.datasets.push(newDataset);
+    window.myLine.update();
   },
   takeHomePercentage: function() {
     var runningTotalPercent = 0;
-    for (var iterator in this.toggleConfig) {
-      if (this.toggleConfig[iterator].theBool === true) {
+    for (var iterator in this.userConfig) {
+      if (this.userConfig[iterator].theBool === true) {
         // Turn it into a whole number with 1 extra digit of precision (e.g. 7.5%), round it, then turn it back into a percentage.
-        runningTotalPercent = Math.ceil((runningTotalPercent + this.toggleConfig[iterator].value) * 1000) / 1000;
+        runningTotalPercent = Math.ceil((runningTotalPercent + this.userConfig[iterator].value) * 1000) / 1000;
       }
     }
     return 1 - runningTotalPercent;
   },
   takeHome: function(salary) {
-    return salary * this.takeHomePercentage(this.toggleConfig)
+    return salary * this.takeHomePercentage(this.userConfig)
   },
-  tuition: function(salary) {
+  /*tuition: function(salary) {
     return salary * 0.125
+  },*/
+  tuition: function(salary) {
+    var runningTotalPercent = 0;
+    for (var iterator in this.userConfig) {
+      if (this.userConfig[iterator].theBool === true) {
+        // Turn it into a whole number with 1 extra digit of precision (e.g. 7.5%), round it, then turn it back into a percentage.
+        runningTotalPercent = Math.ceil((runningTotalPercent + this.userConfig[iterator].value) * 1000) / 1000;
+      }
+    }
+    return salary * runningTotalPercent;
   },
   takeHomeArray: function(arr) {
     var takeHomeArr = []
@@ -59,19 +86,20 @@ var calculator = {
   }
 }
 
+
+
 var config = {
   type: 'line',
   data: {
     // labels is the x-axis data-point labels
     //labels: ["January", "February", "March", "April", "May", "June", "July"],
     labels: [40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000],
-    xAxis: [40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000],
     datasets: [{
-      label: "Sample 1",
-      data: [1, 5, 15, 40, 100, 250],
+      label: "Take-home Pay",
+      data: calculator.takeHomeArray(calculator.userConfig.xAxis)
     }, {
-      label: "Sample 2",
-      data: [1, 5, 15, 40, 100, 250]
+      label: "Tuition",
+      data: calculator.tuitionArray(calculator.userConfig.xAxis)
     }]
   },
   options: {
