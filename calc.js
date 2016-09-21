@@ -10,30 +10,34 @@ var randomColor = function(opacity) {
 
 var calculator = {
   userConfig: {
-    Stipend: {
-      theBool: true,
-      value: (1 - 0.925)
-    }, // should be 7.5%
-    ISA: {
-      theBool: true,
-      value: (1 - 0.875)
-    }, // should be 12.5%
-    Laptop: {
-      theBool: false,
-      value: (1 - 0.99)
-    }, // should be 1%
+    toggles: {
+      Stipend: {
+        name: "Living Stipend ISA",
+        theBool: true,
+        value: (1 - 0.925)
+      }, // should be 7.5%
+      Tuition: {
+        name: "Program ISA",
+        theBool: true,
+        value: (1 - 0.875)
+      }, // should be 12.5%
+      Laptop: {
+        name: "Laptop purchase ISA",
+        theBool: false,
+        value: (1 - 0.99)
+      }, // should be 1%
+    },
     xAxis: [40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000],
   },
   calculate: function() {
     config.data.datasets = [];
 
     var newDataset = {};
-    for (var iterator in this.userConfig) {
-      if (this.userConfig[iterator].theBool === true) {
+    for (var iterator in this.userConfig.toggles) {
+      if (this.userConfig.toggles[iterator].theBool === true) {
         var newData = [];
-        for (var xVal = 0; xVal < this.userConfig.xAxis.length; xVal++ )
-        {
-          newData.push( Math.ceil(this.userConfig.xAxis[xVal] * this.userConfig[iterator].value * 1000) / 1000)
+        for (var xVal = 0; xVal < this.userConfig.xAxis.length; xVal++) {
+          newData.push(Math.ceil(this.userConfig.xAxis[xVal] * this.userConfig.toggles[iterator].value * 1000) / 1000)
         }
         newDataset = {
           label: iterator,
@@ -53,26 +57,26 @@ var calculator = {
   },
   takeHomePercentage: function() {
     var runningTotalPercent = 0;
-    for (var iterator in this.userConfig) {
-      if (this.userConfig[iterator].theBool === true) {
+    for (var iterator in this.userConfig.toggles) {
+      if (this.userConfig.toggles[iterator].theBool === true) {
         // Turn it into a whole number with 1 extra digit of precision (e.g. 7.5%), round it, then turn it back into a percentage.
-        runningTotalPercent = Math.ceil((runningTotalPercent + this.userConfig[iterator].value) * 1000) / 1000;
+        runningTotalPercent = Math.ceil((runningTotalPercent + this.userConfig.toggles[iterator].value) * 1000) / 1000;
       }
     }
     return 1 - runningTotalPercent;
   },
   takeHome: function(salary) {
-    return salary * this.takeHomePercentage(this.userConfig)
+    return salary * this.takeHomePercentage(this.userConfig.toggles)
   },
   /*tuition: function(salary) {
     return salary * 0.125
   },*/
   tuition: function(salary) {
     var runningTotalPercent = 0;
-    for (var iterator in this.userConfig) {
-      if (this.userConfig[iterator].theBool === true) {
+    for (var iterator in this.userConfig.toggles) {
+      if (this.userConfig.toggles[iterator].theBool === true) {
         // Turn it into a whole number with 1 extra digit of precision (e.g. 7.5%), round it, then turn it back into a percentage.
-        runningTotalPercent = Math.ceil((runningTotalPercent + this.userConfig[iterator].value) * 1000) / 1000;
+        runningTotalPercent = Math.ceil((runningTotalPercent + this.userConfig.toggles[iterator].value) * 1000) / 1000;
       }
     }
     return salary * runningTotalPercent;
@@ -95,8 +99,28 @@ var calculator = {
     }
     return tuitionArr
   }
-}
+};
 
+(function() {
+  $('body').append($("<div class='DynamicInput'></div>"));
+
+  var i = 0;
+  for (var toggle in calculator.userConfig.toggles) {
+    $(".DynamicInput").append($("<input type='checkbox' id='box" + i + "'></input>"));
+    $newParagraph = $("#box" + i).before($("<p>").text(calculator.userConfig.toggles[toggle].name));
+    i++;
+  }
+
+})();
+
+$("#box0").change(function() {
+  if (calculator.userConfig.toggles.Stipend.theBool === false) {
+    calculator.userConfig.toggles.Stipend.theBool = true;
+  } else {
+    calculator.userConfig.toggles.Stipend.theBool = false;
+  }
+  calculator.calculate();
+});
 
 
 var config = {
@@ -163,7 +187,7 @@ window.onload = function() {
 $('#randomizeData').click(function() {
   calculator.calculate();
 });
-  /*$.each(config.data.datasets, function(i, dataset) {
+/*$.each(config.data.datasets, function(i, dataset) {
     dataset.data = dataset.data.map(function() {
       return randomScalingFactor();
     });
