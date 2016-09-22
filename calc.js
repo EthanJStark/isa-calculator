@@ -62,11 +62,22 @@ var calculator = {
   },
   calculate: function () {
     config.data.datasets = [];
+    configLoan.data.datasets = [];
 
     // Baseline (never ceases to exist)
     config.data.datasets.push( {
       label: "Take-home Pay",
       data: calculator.takeHomeArray( calculator.userConfigStacked.xAxis )
+    } );
+
+    configLoan.data.datasets.push( {
+      label: "Take-home Pay",
+      data: calculator.takeHomeArray( calculator.userConfigStacked.xAxis )
+    } );
+
+    configLoan.data.datasets.push( {
+      label: "Loan",
+      data: calculator.getLoan(),
     } );
 
     // Dynamic datasets
@@ -173,21 +184,21 @@ var calculator = {
 
   var canvasList = [];
 
-  function ChartSection (canvasLink) {
+  function ChartSection( canvasLink ) {
     this.canvasLink = canvasLink;
     this.checkboxes = [];
     this.inputFields = [];
   }
 
-  canvasList.push ( new ChartSection($( '<div></div>' ).insertAfter( "#canvas" )[0]) );
-  canvasList.push ( new ChartSection($( '<div></div>' ).insertAfter( "#canvas2" )[0]) );
+  canvasList.push( new ChartSection( $( '<div></div>' ).insertAfter( "#canvas" )[ 0 ] ) );
+  canvasList.push( new ChartSection( $( '<div></div>' ).insertAfter( "#canvas2" )[ 0 ] ) );
 
   for ( var canvasIterator in canvasList ) {
     var i = 0;
     for ( var toggle in calculator.userConfigStacked.toggles ) {
-      var pushBox = $("<input type='checkbox' id='box" + i + "'></input>").appendTo(canvasList[canvasIterator].canvasLink)[0];
+      var pushBox = $( "<input type='checkbox' id='box" + i + "'></input>" ).appendTo( canvasList[ canvasIterator ].canvasLink )[ 0 ];
       canvasList[ canvasIterator ].checkboxes.push( pushBox );
-      $( "<p id=" + toggle + "_" + canvasIterator + ">" ).text( calculator.userConfigStacked.toggles[ toggle ].name ).insertBefore(pushBox);
+      $( "<p id=" + toggle + "_" + canvasIterator + ">" ).text( calculator.userConfigStacked.toggles[ toggle ].name ).insertBefore( pushBox );
       i++;
     }
 
@@ -206,7 +217,7 @@ var calculator = {
     i = 0;
   }
 
-})();
+} )();
 
 var config = {
   type: 'line',
