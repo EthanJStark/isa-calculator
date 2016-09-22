@@ -1,16 +1,3 @@
-// Chart.types.Bar.extend({
-//   name: 'BarOverlay',
-//   draw: function(ease) {
-//     Chart.types.Bar.prototype.draw.apply(this);
-//     ctx.beginPath();
-//     ctx.lineWidth = 2;
-//     ctx.strokeStyle = 'rgba(255, 0, 0, 1.0)';
-//     ctx.moveTo(35, this.scale.calculateY(100));
-//     ctx.lineTo(this.scale.calculateX(this.datasets[0].bars.length), this.scale.calculateY(100));
-//     ctx.stroke();
-//   }
-// });
-
 var randomScalingFactor = function() {
   return Math.round(Math.random() * 100 * (Math.random() > 0.5 ? -1 : 1));
 };
@@ -177,18 +164,18 @@ $("#box2").change(function() {
 
 Chart.controllers.lineWithOverlay = Chart.controllers.line.extend({
   name: 'lineWithOverlay',
-  draw: function (ease) {
+  draw: function(ease) {
     Chart.controllers.line.prototype.draw.apply(this, arguments);
 
-    var width =  this.chart.chart.width;
+    var width = this.chart.chart.width;
     var height = this.chart.chart.height;
-    
+
     var ctx = this.chart.chart.ctx
     ctx.beginPath();
     ctx.lineWidth = 2;
     ctx.strokeStyle = 'rgba(255, 0, 0, 1.0)';
-    ctx.moveTo(width/2, height/2);
-    ctx.lineTo((width/2)+10, (height/2)+10);
+    ctx.moveTo(width / 2, height / 2);
+    ctx.lineTo((width / 2) + 10, (height / 2) + 10);
     ctx.stroke();
   }
 });
@@ -218,22 +205,45 @@ var config = {
     },
     tooltips: {
       mode: 'label',
+      ticks: {
+        callback: function(label, index, labels) {
+          return label / 1000 + 'k';
+        },
+      },
     },
     hover: {
-      mode: 'label'
+      mode: 'label',
+      ticks: {
+        callback: function(label, index, labels) {
+          return label / 1000 + 'k';
+        },
+      },
     },
     scales: {
       xAxes: [{
         scaleLabel: {
           display: true,
-          labelString: 'Annual Income'
-        }
+          labelString: 'Annual Income',
+          ticks: {
+            callback: function(label, index, labels) {
+              return label / 1000 + 'k';
+            },
+          },
+        },
       }],
       yAxes: [{
-        stacked: false,
+        ticks: {
+          callback: function(label, index, labels) {
+            return label / 1000 + 'k';
+          }
+        },
+        stacked: true,
         scaleLabel: {
           display: true,
-          labelString: 'Amount Paid (3 YR)'
+          labelString: 'Amount Paid (3 YR)',
+          function(valuePayload) {
+            return Number(valuePayload.value).toFixed(2).replace('.', ',') + '$';
+          },
         }
       }]
     }
@@ -281,7 +291,7 @@ $('#addDataset').click(function() {
     data: [],
   };
 
-  for (var index = 0; index < config.data.labels.length; ++index) {
+  for (var index = 0; index < config.data.labels.length; index++) {
     newDataset.data.push(randomScalingFactor());
   }
 
