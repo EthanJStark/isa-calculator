@@ -29,7 +29,7 @@ Changing variables, like salary and amount of stipend, can result in thousands o
 - [ ] The artifact produced is properly licensed, preferably with the [MIT license][mit-license].
 
 ## Quality Rubric
-- [ ] UX and UI are informed by accesability best practices
+- [ ] UX and UI are informed by accessibility best practices
 - [ ] User-Friendly - Pages load fast, styled enough to not offend the eye
 - [ ] Functional - Project runs in localhost
 - [ ] Clearly Named - Functions, variables, files, CSS classes and ids

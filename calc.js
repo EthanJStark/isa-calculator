@@ -1,15 +1,15 @@
-Chart.types.Bar.extend({
-  name: 'BarOverlay',
-  draw: function(ease) {
-    Chart.types.Bar.prototype.draw.apply(this);
-    ctx.beginPath();
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = 'rgba(255, 0, 0, 1.0)';
-    ctx.moveTo(35, this.scale.calculateY(100));
-    ctx.lineTo(this.scale.calculateX(this.datasets[0].bars.length), this.scale.calculateY(100));
-    ctx.stroke();
-  }
-});
+// Chart.types.Bar.extend({
+//   name: 'BarOverlay',
+//   draw: function(ease) {
+//     Chart.types.Bar.prototype.draw.apply(this);
+//     ctx.beginPath();
+//     ctx.lineWidth = 2;
+//     ctx.strokeStyle = 'rgba(255, 0, 0, 1.0)';
+//     ctx.moveTo(35, this.scale.calculateY(100));
+//     ctx.lineTo(this.scale.calculateX(this.datasets[0].bars.length), this.scale.calculateY(100));
+//     ctx.stroke();
+//   }
+// });
 
 var randomScalingFactor = function() {
   return Math.round(Math.random() * 100 * (Math.random() > 0.5 ? -1 : 1));
@@ -175,8 +175,26 @@ $("#box2").change(function() {
   calculator.calculate();
 });
 
+Chart.controllers.lineWithOverlay = Chart.controllers.line.extend({
+  name: 'lineWithOverlay',
+  draw: function (ease) {
+    Chart.controllers.line.prototype.draw.apply(this, arguments);
+
+    var width =  this.chart.chart.width;
+    var height = this.chart.chart.height;
+    
+    var ctx = this.chart.chart.ctx
+    ctx.beginPath();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(255, 0, 0, 1.0)';
+    ctx.moveTo(width/2, height/2);
+    ctx.lineTo((width/2)+10, (height/2)+10);
+    ctx.stroke();
+  }
+});
+
 var config = {
-  type: 'line',
+  type: 'lineWithOverlay',
   data: {
     // labels is the x-axis data-point labels
     //labels: ["January", "February", "March", "April", "May", "June", "July"],
