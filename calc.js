@@ -94,9 +94,7 @@ var calculator = {
             }
           }
 
-          //newData.push( Math.ceil( this.userConfigStacked.xAxis[ xVal ] * this.userConfigStacked.toggles[ iterator ].value * 1000 ) / 1000 * this.timePeriod )
           newData.push( Math.ceil( pushVal * 1000 ) / 1000 )
-            //debugger;
         }
         newDataset = {
           label: iterator,
@@ -107,7 +105,6 @@ var calculator = {
           pointBorderWidth: 1,
           data: newData,
           fill: true,
-          //this.takeHomeArray(this.userConfigStacked.xAxis),
         }
         config.data.datasets.push( newDataset );
       }
@@ -143,7 +140,6 @@ var calculator = {
     var runningTotalPercent = 0;
     for ( var iterator in this.userConfigStacked.toggles ) {
       if ( this.userConfigStacked.toggles[ iterator ].theBool === true ) {
-        // Turn it into a whole number with 1 extra digit of precision (e.g. 7.5%), round it, then turn it back into a percentage.
         runningTotalPercent = Math.ceil( ( runningTotalPercent + this.userConfigStacked.toggles[ iterator ].value ) * 1000 ) / 1000;
       }
     }
@@ -179,21 +175,28 @@ var calculator = {
 
   // Abstract function
   var pushObject = {
-    canvasLink: null,
+    canvasLink: $(),
     checkboxes: [],
     inputFields: [],
   };
 
-  pushObject.canvasLink = $('#canvas').after( function() { return "<div class='DynamicInputStacked'></div>" })[0];
-  canvasList.push( pushObject );
+  $('#canvas').after( "<div class='DynamicInputStacked'></div>" );
+  pushObject.canvasLink = $(".DynamicInputStacked");
+  pushObject.canvasLink.append();
+
+  canvasList.push ( pushObject );
+
+  //pushObject.canvasLink = $('#canvas').after( function() { return "<div class='DynamicInputStacked'></div>" })[0];
+  //canvasList.push( pushObject );
   pushObject.canvasLink = $( '#canvas2' ).after( function() { return "<div class='DynamicInputLoan'></div>" })[0];
   canvasList.push( pushObject );
 
   for ( var canvasIterator in canvasList ) {
     var i = 0;
     for ( var toggle in calculator.userConfigStacked.toggles ) {
-      var pushBox = canvasList[ canvasIterator ].canvasLink.append( function() { return "<input type='checkbox' id='box" + i + "'></input>"; } )[0] );
-      canvasList[ canvasIterator ].checkboxes.push( pushBox );
+      console.log( canvasList[canvasIterator]);
+      //var pushBox = canvasList[canvasIterator].canvasLink.append( function() { return "<input type='checkbox' id='box" + i + "'></input>"; } )[0];
+      //canvasList[ canvasIterator ].checkboxes.push( pushBox );
       $( "#box" + i ).before( $( "<p>" ).text( calculator.userConfigStacked.toggles[ toggle ].name ) );
       i++;
     }
@@ -215,7 +218,6 @@ var calculator = {
 
 } )();
 
-
 var config = {
   type: 'line',
   data: {
@@ -229,7 +231,7 @@ var config = {
     title: {
       display: true,
       // MAIN HEAD TITLE
-      text: "Chart.js Line Chart - Stacked Area"
+      text: "$ Spend"
     },
     tooltips: {
       mode: 'label',
@@ -278,6 +280,77 @@ var config = {
   }
 };
 
+var configLoan = {
+  type: 'line',
+  data: {
+    // labels is the x-axis data-point labels
+    //labels: ["January", "February", "March", "April", "May", "June", "July"],
+    labels: [ 40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000 ],
+    datasets: [],
+  },
+  options: {
+    responsive: true,
+    title: {
+      display: true,
+      // MAIN HEAD TITLE
+      text: "Loan Comparison"
+    },
+    tooltips: {
+      mode: 'label',
+      ticks: {
+        callback: function ( label, index, labels ) {
+          return label / 1000 + 'k';
+        },
+      },
+    },
+    hover: {
+      mode: 'label',
+      ticks: {
+        callback: function ( label, index, labels ) {
+          return label / 1000 + 'k';
+        },
+      },
+    },
+    scales: {
+      xAxes: [ {
+        scaleLabel: {
+          display: true,
+          labelString: 'Annual Income',
+        },
+        ticks: {
+          callback: function ( label, index, labels ) {
+            return label / 1000 + 'k';
+          },
+        },
+      } ],
+      yAxes: [ {
+        ticks: {
+          callback: function ( label, index, labels ) {
+            return label / 1000 + 'k';
+          }
+        },
+        stacked: false,
+        scaleLabel: {
+          display: true,
+          labelString: 'Amount Paid (3 YR)',
+          function ( valuePayload ) {
+            return Number( valuePayload.value ).toFixed( 2 ).replace( '.', ',' ) + '$';
+          },
+        }
+      } ]
+    }
+  }
+};
+
+// Serafin: HELP! How do I import other files like in C++ with header files!
+// These objects above are WAY TO BIG to be taking up space in this JS file
+
+//var fs = require('fs');
+//var config = JSON.parse(fs.readFileSync('configStacked.json', 'utf8'));
+//var configLoan = JSON.parse(fs.readFileSync('configLoan.json', 'utf8'));
+
+// var configLoan = JSON.parse(fs.readFileSync('configStacked.json', 'utf8'));
+
 $.each( config.data.datasets, function ( i, dataset ) {
   var color = randomColor( 1 );
   dataset.borderColor = color;
@@ -291,6 +364,9 @@ window.onload = function () {
   var ctx = document.getElementById( "canvas" ).getContext( "2d" );
   // IMPORTANT - this is where the chart is instantiated.
   window.myLine = new Chart( ctx, config );
+  var ctx2 = document.getElementById( "canvas2" ).getContext( "2d" );
+  // IMPORTANT - this is where the chart is instantiated.
+  window.myLine2 = new Chart( ctx2, configLoan );
   calculator.calculate();
 };
 
