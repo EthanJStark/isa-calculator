@@ -1,3 +1,16 @@
+Chart.types.Bar.extend({
+  name: 'BarOverlay',
+  draw: function(ease) {
+    Chart.types.Bar.prototype.draw.apply(this);
+    ctx.beginPath();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = 'rgba(255, 0, 0, 1.0)';
+    ctx.moveTo(35, this.scale.calculateY(100));
+    ctx.lineTo(this.scale.calculateX(this.datasets[0].bars.length), this.scale.calculateY(100));
+    ctx.stroke();
+  }
+});
+
 var randomScalingFactor = function() {
   return Math.round(Math.random() * 100 * (Math.random() > 0.5 ? -1 : 1));
 };
@@ -27,6 +40,7 @@ var calculator = {
         name: "Laptop purchase ISA",
         theBool: false,
         value: (1 - 0.99),
+        max: 9000,
       }, // should be 1%
     },
     xAxis: [40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000],
@@ -39,7 +53,10 @@ var calculator = {
       if (this.userConfig.toggles[iterator].theBool === true) {
         var newData = [];
         for (var xVal = 0; xVal < this.userConfig.xAxis.length; xVal++) {
+          //var thisIterator = this.userConfig.toggles[iterator];
+          //var nameMeVar = (thisIterator.value > thisIterator.max ? thisIterator.value : thisIterator.max );
           newData.push(Math.ceil(this.userConfig.xAxis[xVal] * this.userConfig.toggles[iterator].value * 1000) / 1000 * 3)
+            //newData.push(Math.ceil(this.userConfig.xAxis[xVal] * nameMeVar * 1000) / 1000 * 3)
         }
         newDataset = {
           label: iterator,
@@ -49,17 +66,29 @@ var calculator = {
           pointBackgroundColor: randomColor(0.5),
           pointBorderWidth: 1,
           data: newData,
+          fill: false,
           //this.takeHomeArray(this.userConfig.xAxis),
         }
         config.data.datasets.push(newDataset);
       }
     }
+    var bankLoanDataSet = [];
+    for (var i = 0; i < calculator.userConfig.xAxis.length; i++) {
+      bankLoanDataSet.push(50000);
+    }
 
+    config.data.datasets.push({
+      label: "Bank Loan",
+      data: bankLoanDataSet
+    });
     // Baseline (never ceases to exist)
     config.data.datasets.push({
       label: "Take-home Pay",
       data: calculator.takeHomeArray(calculator.userConfig.xAxis)
     });
+
+
+
 
     window.myLine.update();
   },
@@ -154,11 +183,13 @@ var config = {
     labels: [40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000],
     datasets: [{
       label: "Take-home Pay",
-      data: calculator.takeHomeArray(calculator.userConfig.xAxis)
+      data: calculator.takeHomeArray(calculator.userConfig.xAxis),
+      fill: false,
     }, {
       label: "Tuition",
-      data: calculator.tuitionArray(calculator.userConfig.xAxis)
-    }]
+      data: calculator.tuitionArray(calculator.userConfig.xAxis),
+      fill: false,
+    }],
   },
   options: {
     responsive: true,
@@ -181,7 +212,7 @@ var config = {
         }
       }],
       yAxes: [{
-        stacked: true,
+        stacked: false,
         scaleLabel: {
           display: true,
           labelString: 'Amount Paid (3 YR)'
