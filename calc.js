@@ -75,10 +75,10 @@ var calculator = {
       data: calculator.takeHomeArray( calculator.userConfigStacked.xAxis )
     } );
 
-    configLoan.data.datasets.push( {
-      label: "Loan",
-      data: calculator.getLoan(),
-    } );
+    // configLoan.data.datasets.push( {
+    //   label: "Loan",
+    //   //data: calculator.getLoan(),
+    // } );
 
     // Dynamic datasets
     var newDataset = {};
@@ -120,17 +120,6 @@ var calculator = {
         config.data.datasets.push( newDataset );
       }
     }
-    /* TODO: Move me into my own function for OTHER graph
-    var bankLoanDataSet = [];
-    for (var i = 0; i < calculator.userConfigStacked.xAxis.length; i++) {
-      bankLoanDataSet.push(50000);
-    }
-
-    config.data.datasets.push({
-      label: "Bank Loan",
-      data: bankLoanDataSet
-    });
-    */
 
     window.myLine.update();
   },
@@ -175,9 +164,6 @@ var calculator = {
     return tuitionArr
   }
 };
-
-// TODO: Put back into closure when done with debugging
-
 
 // Dynamically generate user input options
 ( function () {
@@ -370,60 +356,3 @@ window.onload = function () {
   window.myLine2 = new Chart( ctx2, configLoan );
   calculator.calculate();
 };
-
-//$("body").append("<canvas id='canvas1'></canvas>");
-
-
-$( '#randomizeData' ).click( function () {
-  calculator.calculate();
-} );
-
-$( '#addDataset' ).click( function () {
-  var newDataset = {
-    label: 'Dataset ' + config.data.datasets.length,
-    borderColor: randomColor( 0.4 ),
-    backgroundColor: randomColor( 0.5 ),
-    pointBorderColor: randomColor( 0.7 ),
-    pointBackgroundColor: randomColor( 0.5 ),
-    pointBorderWidth: 1,
-    data: [],
-  };
-
-  for ( var index = 0; index < config.data.labels.length; index++ ) {
-    newDataset.data.push( randomScalingFactor() );
-  }
-
-  // Because config.data.dataset uses datasets that use randomize function
-  // this pushes one of those randomized ones, thus, randomizing again
-  // We need to pull from our own personal array if we want to push a new dataset.
-  config.data.datasets.push( newDataset );
-  window.myLine.update();
-} );
-
-$( '#addData' ).click( function () {
-  if ( config.data.datasets.length > 0 ) {
-    var month = MONTHS[ config.data.labels.length % MONTHS.length ];
-    config.data.labels.push( month );
-
-    $.each( config.data.datasets, function ( i, dataset ) {
-      dataset.data.push( randomScalingFactor() );
-    } );
-
-    window.myLine.update();
-  }
-} );
-
-$( '#removeDataset' ).click( function () {
-  config.data.datasets.splice( 0, 1 );
-  window.myLine.update();
-} );
-
-$( '#removeData' ).click( function () {
-  config.data.labels.splice( -1, 1 ); // remove the label first
-
-  config.data.datasets.forEach( function ( dataset, datasetIndex ) {
-    dataset.data.pop();
-  } );
-
-  window.myLine.update();
-} );
