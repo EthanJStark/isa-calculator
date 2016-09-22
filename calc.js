@@ -173,31 +173,21 @@ var calculator = {
 
   var canvasList = [];
 
-  // Abstract function
-  var pushObject = {
-    canvasLink: $(),
-    checkboxes: [],
-    inputFields: [],
-  };
+  function ChartSection (canvasLink) {
+    this.canvasLink = canvasLink;
+    this.checkboxes = [];
+    this.inputFields = [];
+  }
 
-  $('#canvas').after( "<div class='DynamicInputStacked'></div>" );
-  pushObject.canvasLink = $(".DynamicInputStacked");
-  pushObject.canvasLink.append();
-
-  canvasList.push ( pushObject );
-
-  //pushObject.canvasLink = $('#canvas').after( function() { return "<div class='DynamicInputStacked'></div>" })[0];
-  //canvasList.push( pushObject );
-  pushObject.canvasLink = $( '#canvas2' ).after( function() { return "<div class='DynamicInputLoan'></div>" })[0];
-  canvasList.push( pushObject );
+  canvasList.push ( new ChartSection($( '<div></div>' ).insertAfter( "#canvas" )[0]) );
+  canvasList.push ( new ChartSection($( '<div></div>' ).insertAfter( "#canvas2" )[0]) );
 
   for ( var canvasIterator in canvasList ) {
     var i = 0;
     for ( var toggle in calculator.userConfigStacked.toggles ) {
-      console.log( canvasList[canvasIterator]);
-      //var pushBox = canvasList[canvasIterator].canvasLink.append( function() { return "<input type='checkbox' id='box" + i + "'></input>"; } )[0];
-      //canvasList[ canvasIterator ].checkboxes.push( pushBox );
-      $( "#box" + i ).before( $( "<p>" ).text( calculator.userConfigStacked.toggles[ toggle ].name ) );
+      var pushBox = $("<input type='checkbox' id='box" + i + "'></input>").appendTo(canvasList[canvasIterator].canvasLink)[0];
+      canvasList[ canvasIterator ].checkboxes.push( pushBox );
+      $( "<p id=" + toggle + "_" + canvasIterator + ">" ).text( calculator.userConfigStacked.toggles[ toggle ].name ).insertBefore(pushBox);
       i++;
     }
 
@@ -216,7 +206,7 @@ var calculator = {
     i = 0;
   }
 
-} )();
+})();
 
 var config = {
   type: 'line',
@@ -369,6 +359,8 @@ window.onload = function () {
   window.myLine2 = new Chart( ctx2, configLoan );
   calculator.calculate();
 };
+
+//$("body").append("<canvas id='canvas1'></canvas>");
 
 
 $( '#randomizeData' ).click( function () {
