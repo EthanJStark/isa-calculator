@@ -20,21 +20,21 @@ Changing variables, like salary and amount of stipend, can result in thousands o
 
 
 ## Specs
-- [ ] Data is presented visually
-- [ ] User can visualize the percentage of their gross income being paid as tuition
-- [ ] User is presented with some pre-populated data
-- [ ] User can define what their starting salary is
-- [ ] User can toggle Living ISA
-- [ ] User can toggle Laptop ISA
-- [ ] The artifact produced is properly licensed, preferably with the [MIT license][mit-license].
+- [X] Data is presented visually
+- [X] User can visualize the percentage of their gross income being paid as tuition
+- [X] User is presented with some pre-populated data
+- [X] User can define what their starting salary is
+- [X] User can toggle Living ISA
+- [X] User can toggle Laptop ISA
+- [X] The artifact produced is properly licensed, preferably with the [MIT license][mit-license].
 
 ## Quality Rubric
-- [ ] UX and UI are informed by accessibility best practices
-- [ ] User-Friendly - Pages load fast, styled enough to not offend the eye
-- [ ] Functional - Project runs in localhost
-- [ ] Clearly Named - Functions, variables, files, CSS classes and ids
-- [ ] Git Logged - Readable and clean with clear, complete, professional commit messages
-- [ ] Not Commented - Unless truly necessary.
+- [7] UX and UI are informed by accessibility best practices
+- [10] User-Friendly - Pages load fast, styled enough to not offend the eye
+- [10] Functional - Project runs in localhost
+- [5] Clearly Named - Functions, variables, files, CSS classes and ids
+- [6] Git Logged - Readable and clean with clear, complete, professional commit messages
+- [10] Not Commented - Unless truly necessary.
 
 
 
