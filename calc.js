@@ -16,19 +16,19 @@ var calculator = {
         theBool: false,
         value: (1 - 0.925),
         max: 27692,
-      }, // should be 7.5%
+      },
       Tuition: {
         name: "Program ISA",
         theBool: false,
         value: (1 - 0.875),
         max: 59500,
-      }, // should be 12.5%
+      },
       Laptop: {
         name: "Laptop purchase ISA",
         theBool: false,
         value: (1 - 0.99),
         max: 9000,
-      }, // should be 1%
+      },
     },
     xAxis: [40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000],
   },
@@ -36,14 +36,17 @@ var calculator = {
     config.data.datasets = [];
 
     var newDataset = {};
+
+    config.data.datasets.push({
+      label: "Take-home Pay",
+      data: calculator.takeHomeArray(calculator.userConfig.xAxis)
+    });
+
     for (var iterator in this.userConfig.toggles) {
       if (this.userConfig.toggles[iterator].theBool === true) {
         var newData = [];
         for (var xVal = 0; xVal < this.userConfig.xAxis.length; xVal++) {
-          //var thisIterator = this.userConfig.toggles[iterator];
-          //var nameMeVar = (thisIterator.value > thisIterator.max ? thisIterator.value : thisIterator.max );
           newData.push(Math.ceil(this.userConfig.xAxis[xVal] * this.userConfig.toggles[iterator].value * 1000) / 1000 * 3)
-            //newData.push(Math.ceil(this.userConfig.xAxis[xVal] * nameMeVar * 1000) / 1000 * 3)
         }
         newDataset = {
           label: iterator,
@@ -53,29 +56,11 @@ var calculator = {
           pointBackgroundColor: randomColor(0.5),
           pointBorderWidth: 1,
           data: newData,
-          fill: false,
-          //this.takeHomeArray(this.userConfig.xAxis),
+          fill: true,
         }
         config.data.datasets.push(newDataset);
       }
     }
-    var bankLoanDataSet = [];
-    for (var i = 0; i < calculator.userConfig.xAxis.length; i++) {
-      bankLoanDataSet.push(50000);
-    }
-
-    config.data.datasets.push({
-      label: "Bank Loan",
-      data: bankLoanDataSet
-    });
-    // Baseline (never ceases to exist)
-    config.data.datasets.push({
-      label: "Take-home Pay",
-      data: calculator.takeHomeArray(calculator.userConfig.xAxis)
-    });
-
-
-
 
     window.myLine.update();
   },
@@ -83,7 +68,6 @@ var calculator = {
     var runningTotalPercent = 0;
     for (var iterator in this.userConfig.toggles) {
       if (this.userConfig.toggles[iterator].theBool === true) {
-        // Turn it into a whole number with 1 extra digit of precision (e.g. 7.5%), round it, then turn it back into a percentage.
         runningTotalPercent = Math.ceil((runningTotalPercent + this.userConfig.toggles[iterator].value) * 1000) / 1000;
       }
     }
@@ -96,7 +80,6 @@ var calculator = {
     var runningTotalPercent = 0;
     for (var iterator in this.userConfig.toggles) {
       if (this.userConfig.toggles[iterator].theBool === true) {
-        // Turn it into a whole number with 1 extra digit of precision (e.g. 7.5%), round it, then turn it back into a percentage.
         runningTotalPercent = Math.ceil((runningTotalPercent + this.userConfig.toggles[iterator].value) * 1000) / 1000;
       }
     }
@@ -162,45 +145,24 @@ $("#box2").change(function() {
   calculator.calculate();
 });
 
-Chart.controllers.lineWithOverlay = Chart.controllers.line.extend({
-  name: 'lineWithOverlay',
-  draw: function(ease) {
-    Chart.controllers.line.prototype.draw.apply(this, arguments);
-
-    var width = this.chart.chart.width;
-    var height = this.chart.chart.height;
-
-    var ctx = this.chart.chart.ctx
-    ctx.beginPath();
-    ctx.lineWidth = 2;
-    ctx.strokeStyle = 'rgba(255, 0, 0, 1.0)';
-    ctx.moveTo(width / 2, height / 2);
-    ctx.lineTo((width / 2) + 10, (height / 2) + 10);
-    ctx.stroke();
-  }
-});
-
 var config = {
-  type: 'lineWithOverlay',
+  type: 'line',
   data: {
-    // labels is the x-axis data-point labels
-    //labels: ["January", "February", "March", "April", "May", "June", "July"],
     labels: [40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000],
     datasets: [{
       label: "Take-home Pay",
       data: calculator.takeHomeArray(calculator.userConfig.xAxis),
-      fill: false,
+      fill: true,
     }, {
       label: "Tuition",
       data: calculator.tuitionArray(calculator.userConfig.xAxis),
-      fill: false,
+      fill: true,
     }],
   },
   options: {
     responsive: true,
     title: {
       display: true,
-      // MAIN HEAD TITLE
       text: "Chart.js Line Chart - Stacked Area"
     },
     tooltips: {
@@ -263,6 +225,7 @@ window.onload = function() {
   var ctx = document.getElementById("canvas").getContext("2d");
   // IMPORTANT - this is where the chart is instantiated.
   window.myLine = new Chart(ctx, config);
+  calculator.calculate();
 };
 
 $('#addDataset').click(function() {
