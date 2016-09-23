@@ -70,10 +70,10 @@ var calculator = {
       data: calculator.takeHomeArray( calculator.userConfigStacked.xAxis )
     } );
 
-    configLoan.data.datasets.push( {
-      label: "Take-home Pay",
-      data: calculator.takeHomeArray( calculator.userConfigStacked.xAxis )
-    } );
+    // configLoan.data.datasets.push( {
+    //   label: "Take-home Pay",
+    //   data: calculator.takeHomeArray( calculator.userConfigStacked.xAxis )
+    // } );
 
     // configLoan.data.datasets.push( {
     //   label: "Loan",
@@ -258,9 +258,7 @@ var config = {
         scaleLabel: {
           display: true,
           labelString: 'Amount Paid (3 YR)',
-          function ( valuePayload ) {
-            return Number( valuePayload.value ).toFixed( 2 ).replace( '.', ',' ) + '$';
-          },
+
         }
       } ]
     }
@@ -302,7 +300,7 @@ var configLoan = {
       xAxes: [ {
         scaleLabel: {
           display: true,
-          labelString: 'Annual Income',
+          labelString: 'Annual Income'
         },
         ticks: {
           callback: function ( label, index, labels ) {
@@ -319,10 +317,7 @@ var configLoan = {
         stacked: false,
         scaleLabel: {
           display: true,
-          labelString: 'Amount Paid (3 YR)',
-          function ( valuePayload ) {
-            return Number( valuePayload.value ).toFixed( 2 ).replace( '.', ',' ) + '$';
-          },
+          labelString: 'Amount Paid (3 YR)'
         }
       } ]
     }
