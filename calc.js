@@ -1,11 +1,11 @@
-var randomScalingFactor = function() {
-  return Math.round(Math.random() * 100 * (Math.random() > 0.5 ? -1 : 1));
+var randomScalingFactor = function () {
+  return Math.round( Math.random() * 100 * ( Math.random() > 0.5 ? -1 : 1 ) );
 };
-var randomColorFactor = function() {
-  return Math.round(Math.random() * 255);
+var randomColorFactor = function () {
+  return Math.round( Math.random() * 255 );
 };
-var randomColor = function(opacity) {
-  return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + (opacity || '1') + ')';
+var randomColor = function ( opacity ) {
+  return 'rgba(' + randomColorFactor() + ',' + randomColorFactor() + ',' + randomColorFactor() + ',' + ( opacity || '1' ) + ')';
 };
 
 var calculator = {
@@ -133,66 +133,58 @@ var calculator = {
   }
 };
 
-(function() {
-  $('body div').append($("<div class='DynamicInput'></div>"));
+( function () {
+  $( 'body div' ).append( $( "<div class='DynamicInput'></div>" ) );
 
   var i = 0;
-  for (var toggle in calculator.userConfig.toggles) {
-    $(".DynamicInput").append($("<input type='checkbox' id='box" + i + "'></input>"));
-    $newParagraph = $("#box" + i).before($("<p>").text(calculator.userConfig.toggles[toggle].name));
+  for ( var toggle in calculator.userConfig.toggles ) {
+    $( ".DynamicInput" ).append( $( "<input type='checkbox' id='box" + i + "'></input>" ) );
+    $newParagraph = $( "#box" + i ).before( $( "<p>" ).text( calculator.userConfig.toggles[ toggle ].name ) );
     i++;
   }
 
-  $("<p>Number of Years</p>").appendTo(".DynamicInput");
-    var $inputYears = $("<input type='text' id='years'></input>").appendTo(".DynamicInput");
-
-  $("#years").change(function() {
-    calculator.timePeriod = Number($("#years").val());
-    calculator.calculate();
-  });
-
-  $("#box0").change(function() {
-    if (document.getElementById('box0').checked) {
+  $( "#box0" ).change( function () {
+    if ( document.getElementById( 'box0' ).checked ) {
       calculator.userConfig.toggles.Stipend.theBool = true;
     } else {
       calculator.userConfig.toggles.Stipend.theBool = false;
     }
     calculator.calculate();
-  });
+  } );
 
-  $("#box1").change(function() {
-    if (document.getElementById('box1').checked) {
+  $( "#box1" ).change( function () {
+    if ( document.getElementById( 'box1' ).checked ) {
       calculator.userConfig.toggles.Tuition.theBool = true;
     } else {
       calculator.userConfig.toggles.Tuition.theBool = false;
     }
     calculator.calculate();
-  });
+  } );
 
-  $("#box2").change(function() {
-    if (document.getElementById('box2').checked) {
+  $( "#box2" ).change( function () {
+    if ( document.getElementById( 'box2' ).checked ) {
       calculator.userConfig.toggles.Laptop.theBool = true;
     } else {
       calculator.userConfig.toggles.Laptop.theBool = false;
     }
     calculator.calculate();
-  });
+  } );
 
-})();
+} )();
 
 var config = {
   type: 'line',
   data: {
-    labels: ["40k"," 50k"," 60k"," 70k"," 80k"," 90k", "100k", "110k", "120k", "130k", "140k", "150k"],
-    datasets: [{
+    labels: [ "40k", " 50k", " 60k", " 70k", " 80k", " 90k", "100k", "110k", "120k", "130k", "140k", "150k" ],
+    datasets: [ {
       label: "Take-home Pay",
-      data: calculator.takeHomeArray(calculator.userConfig.xAxis),
+      data: calculator.takeHomeArray( calculator.userConfig.xAxis ),
       fill: true,
     }, {
       label: "Tuition",
-      data: calculator.tuitionArray(calculator.userConfig.xAxis),
+      data: calculator.tuitionArray( calculator.userConfig.xAxis ),
       fill: true,
-    }],
+    } ],
   },
   options: {
     responsive: true,
@@ -203,7 +195,7 @@ var config = {
     tooltips: {
       mode: 'label',
       ticks: {
-        callback: function(label, index, labels) {
+        callback: function ( label, index, labels ) {
           return label / 1000 + 'k';
         },
       },
@@ -211,26 +203,26 @@ var config = {
     hover: {
       mode: 'label',
       ticks: {
-        callback: function(label, index, labels) {
+        callback: function ( label, index, labels ) {
           return label / 1000 + 'k';
         },
       },
     },
     scales: {
-      xAxes: [{
+      xAxes: [ {
         scaleLabel: {
           display: true,
           labelString: 'Annual Income',
           ticks: {
-            callback: function(label, index, labels) {
+            callback: function ( label, index, labels ) {
               return label / 1000 + 'k';
             },
           },
         },
-      }],
-      yAxes: [{
+      } ],
+      yAxes: [ {
         ticks: {
-          callback: function(label, index, labels) {
+          callback: function ( label, index, labels ) {
             return label / 1000 + 'k';
           }
         },
@@ -238,46 +230,46 @@ var config = {
         scaleLabel: {
           display: true,
           labelString: 'Amount Paid (3 YR)',
-          function(valuePayload) {
-            return Number(valuePayload.value).toFixed(2).replace('.', ',') + '$';
+          function ( valuePayload ) {
+            return Number( valuePayload.value ).toFixed( 2 ).replace( '.', ',' ) + '$';
           },
         }
-      }]
+      } ]
     }
   }
 };
 
-$.each(config.data.datasets, function(i, dataset) {
-  var color = randomColor(1);
+$.each( config.data.datasets, function ( i, dataset ) {
+  var color = randomColor( 1 );
   dataset.borderColor = color;
   dataset.backgroundColor = color;
   dataset.pointBorderColor = color;
   dataset.pointBackgroundColor = color;
   dataset.pointBorderWidth = 1;
-});
+} );
 
-window.onload = function() {
-  var ctx = document.getElementById("canvas").getContext("2d");
+window.onload = function () {
+  var ctx = document.getElementById( "canvas" ).getContext( "2d" );
   // IMPORTANT - this is where the chart is instantiated.
-  window.myLine = new Chart(ctx, config);
+  window.myLine = new Chart( ctx, config );
   calculator.calculate();
 };
 
-$('#addDataset').click(function() {
+$( '#addDataset' ).click( function () {
   var newDataset = {
     label: 'Dataset ' + config.data.datasets.length,
-    borderColor: randomColor(0.4),
-    backgroundColor: randomColor(0.5),
-    pointBorderColor: randomColor(0.7),
-    pointBackgroundColor: randomColor(0.5),
+    borderColor: randomColor( 0.4 ),
+    backgroundColor: randomColor( 0.5 ),
+    pointBorderColor: randomColor( 0.7 ),
+    pointBackgroundColor: randomColor( 0.5 ),
     pointBorderWidth: 1,
     data: [],
   };
 
-  for (var index = 0; index < config.data.labels.length; index++) {
-    newDataset.data.push(randomScalingFactor());
+  for ( var index = 0; index < config.data.labels.length; index++ ) {
+    newDataset.data.push( randomScalingFactor() );
   }
 
-  config.data.datasets.push(newDataset);
+  config.data.datasets.push( newDataset );
   window.myLine.update();
-});
+} );

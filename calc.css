@@ -4,7 +4,6 @@ body {
 }
 
 .container {
-  border: 2px gray solid;
   transform: translate(-50%, -50%);
   position: absolute;
   top: 60%;
@@ -12,9 +11,6 @@ body {
   padding: 15px 5px;
 }
 
-.container canvas {
-  border: 2px gray solid;
-}
 
 .DynamicInput * {
   display: inline-block;
