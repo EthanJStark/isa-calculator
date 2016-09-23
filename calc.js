@@ -134,7 +134,7 @@ var calculator = {
 };
 
 (function() {
-  $('body').append($("<div class='DynamicInput'></div>"));
+  $('body div').append($("<div class='DynamicInput'></div>"));
 
   var i = 0;
   for (var toggle in calculator.userConfig.toggles) {
