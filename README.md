@@ -5,6 +5,10 @@ Create an online calculator that allows a prospective Learners Guild applicant t
 Customer: for deployment on Learnersguild.org
 User: a prospective applicant
 
+**Scroll down for screenshots!**
+
+To run this calculator, clone this repo, open ```estim.html``` in your browser.
+
 ## Context
 
 _Why is this goal important? How is it useful? What questions will it raise?_
