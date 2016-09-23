@@ -9,7 +9,7 @@ var randomColor = function(opacity) {
 };
 
 var calculator = {
-  timePeriod: 1,
+  timePeriod: 3,
   userConfig: {
     toggles: {
       Stipend: {
@@ -143,9 +143,6 @@ var calculator = {
     i++;
   }
 
-  $("<p>Number of Years</p>").appendTo(".DynamicInput");
-  var $inputYears = $("<input type='text' id='years'></input>").appendTo(".DynamicInput");
-
   $("#box0").change(function() {
     if (document.getElementById('box0').checked) {
       calculator.userConfig.toggles.Stipend.theBool = true;
@@ -175,15 +172,10 @@ var calculator = {
 
 })();
 
-$("#years").change(function() {
-  calculator.userConfig.timePeriod = Number($("#years").val());
-  calculator.calculate();
-});
-
 var config = {
   type: 'line',
   data: {
-    labels: [40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000],
+    labels: ["40k"," 50k"," 60k"," 70k"," 80k"," 90k", "100k", "110k", "120k", "130k", "140k", "150k"],
     datasets: [{
       label: "Take-home Pay",
       data: calculator.takeHomeArray(calculator.userConfig.xAxis),
@@ -198,7 +190,7 @@ var config = {
     responsive: true,
     title: {
       display: true,
-      text: "Chart.js Line Chart - Stacked Area"
+      text: "ISA Takehome Calculator"
     },
     tooltips: {
       mode: 'label',
