@@ -9,97 +9,125 @@ var randomColor = function(opacity) {
 };
 
 var calculator = {
+  timePeriod: 1,
   userConfig: {
     toggles: {
       Stipend: {
         name: "Living Stipend ISA",
         theBool: false,
-        value: (1 - 0.925),
+        value: Math.ceil( ( 1 - 0.925 ) * 1000 ) / 1000,
         max: 27692,
-      },
+        min: 0,
+        limitAt50k: true,
+      }, // should be 7.5%
       Tuition: {
         name: "Program ISA",
         theBool: false,
-        value: (1 - 0.875),
+        value: Math.ceil( ( 1 - 0.875 ) * 1000 ) / 1000,
         max: 59500,
-      },
+        min: 0,
+        limitAt50k: true,
+      }, // should be 12.5%
       Laptop: {
         name: "Laptop purchase ISA",
         theBool: false,
-        value: (1 - 0.99),
+        value: Math.floor( ( 1 - 0.99 ) * 1000 ) / 1000,
         max: 9000,
-      },
+        min: 0,
+        limitAt50k: true,
+      }, // should be 1%
     },
-    xAxis: [40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000],
+    xAxis: [ 40000, 50000, 60000, 70000, 80000, 90000, 100000, 110000, 120000, 130000, 140000, 150000 ],
   },
-  calculate: function() {
+  calculate: function () {
     config.data.datasets = [];
 
-    var newDataset = {};
-
-    config.data.datasets.push({
+    // Baseline (never ceases to exist)
+    config.data.datasets.push( {
       label: "Take-home Pay",
-      data: calculator.takeHomeArray(calculator.userConfig.xAxis)
-    });
+      data: calculator.takeHomeArray( calculator.userConfig.xAxis )
+    } );
 
-    for (var iterator in this.userConfig.toggles) {
-      if (this.userConfig.toggles[iterator].theBool === true) {
+    // Dynamic datasets
+    var newDataset = {};
+    for ( var iterator in this.userConfig.toggles ) {
+      if ( this.userConfig.toggles[ iterator ].theBool === true ) {
         var newData = [];
-        for (var xVal = 0; xVal < this.userConfig.xAxis.length; xVal++) {
-          newData.push(Math.ceil(this.userConfig.xAxis[xVal] * this.userConfig.toggles[iterator].value * 1000) / 1000 * 3)
+        for ( var xVal = 0; xVal < this.userConfig.xAxis.length; xVal++ ) {
+          var thisIterator = this.userConfig.toggles[ iterator ];
+          var loopVal = thisIterator.value * this.userConfig.xAxis[ xVal ] * this.timePeriod;
+          var pushVal;
+          if ( loopVal < thisIterator.max ) {
+            if ( loopVal < thisIterator.min ) {
+              pushVal = thisIterator.min;
+            } else {
+              pushVal = loopVal;
+            }
+          } else {
+            pushVal = thisIterator.max;
+          }
+
+          if ( this.userConfig.xAxis[ xVal ] < 50000 ) {
+            if ( thisIterator.limitAt50k ) {
+              pushVal = 0;
+            }
+          }
+
+          newData.push( Math.ceil( pushVal * 1000 ) / 1000 )
         }
         newDataset = {
           label: iterator,
-          borderColor: randomColor(0.4),
-          backgroundColor: randomColor(0.5),
-          pointBorderColor: randomColor(0.7),
-          pointBackgroundColor: randomColor(0.5),
+          borderColor: randomColor( 0.4 ),
+          backgroundColor: randomColor( 0.5 ),
+          pointBorderColor: randomColor( 0.7 ),
+          pointBackgroundColor: randomColor( 0.5 ),
           pointBorderWidth: 1,
           data: newData,
           fill: true,
         }
-        config.data.datasets.push(newDataset);
+        config.data.datasets.push( newDataset );
       }
     }
 
     window.myLine.update();
   },
-  takeHomePercentage: function() {
+  takeHomePercentage: function () {
     var runningTotalPercent = 0;
-    for (var iterator in this.userConfig.toggles) {
-      if (this.userConfig.toggles[iterator].theBool === true) {
-        runningTotalPercent = Math.ceil((runningTotalPercent + this.userConfig.toggles[iterator].value) * 1000) / 1000;
+    for ( var iterator in this.userConfig.toggles ) {
+      if ( this.userConfig.toggles[ iterator ].theBool === true ) {
+        // Turn it into a whole number with 1 extra digit of precision (e.g. 7.5%), round it, then turn it back into a percentage.
+        runningTotalPercent = Math.ceil( ( runningTotalPercent + this.userConfig.toggles[ iterator ].value ) * 1000 ) / 1000;
       }
     }
     return 1 - runningTotalPercent;
   },
-  takeHome: function(salary) {
-    return salary * this.takeHomePercentage(this.userConfig.toggles) * 3
+  takeHome: function ( salary ) {
+    return salary * this.takeHomePercentage( this.userConfig.toggles ) * this.timePeriod
   },
-  tuition: function(salary) {
+  tuition: function ( salary ) {
     var runningTotalPercent = 0;
-    for (var iterator in this.userConfig.toggles) {
-      if (this.userConfig.toggles[iterator].theBool === true) {
-        runningTotalPercent = Math.ceil((runningTotalPercent + this.userConfig.toggles[iterator].value) * 1000) / 1000;
+    for ( var iterator in this.userConfig.toggles ) {
+      if ( this.userConfig.toggles[ iterator ].theBool === true ) {
+        runningTotalPercent = Math.ceil( ( runningTotalPercent + this.userConfig.toggles[ iterator ].value ) * 1000 ) / 1000;
       }
     }
     return salary * runningTotalPercent;
   },
-  takeHomeArray: function(arr) {
+  takeHomeArray: function ( arr ) {
     var takeHomeArr = []
     var temp
-    for (var i = 0; i < arr.length; i++) {
-      temp = this.takeHome(arr[i])
-      takeHomeArr.push(temp)
+    for ( var i = 0; i < arr.length; i++ ) {
+      temp = this.takeHome( arr[ i ] )
+      takeHomeArr.push( temp )
     }
     return takeHomeArr
   },
-  tuitionArray: function(arr) {
+  tuitionArray: function ( arr ) {
     var tuitionArr = []
     var temp
-    for (var i = 0; i < arr.length; i++) {
-      temp = this.tuition(arr[i])
-      tuitionArr.push(temp)
+    for ( var i = 0; i < arr.length; i++ ) {
+      temp = this.tuition( arr[ i ] )
+      tuitionArr.push( temp )
     }
     return tuitionArr
   }
@@ -115,33 +143,40 @@ var calculator = {
     i++;
   }
 
+  $("<p>Number of Years</p>").appendTo(".DynamicInput");
+  var $inputYears = $("<input type='text' id='years'></input>").appendTo(".DynamicInput");
+
+  $("#box0").change(function() {
+    if (document.getElementById('box0').checked) {
+      calculator.userConfig.toggles.Stipend.theBool = true;
+    } else {
+      calculator.userConfig.toggles.Stipend.theBool = false;
+    }
+    calculator.calculate();
+  });
+
+  $("#box1").change(function() {
+    if (document.getElementById('box1').checked) {
+      calculator.userConfig.toggles.Tuition.theBool = true;
+    } else {
+      calculator.userConfig.toggles.Tuition.theBool = false;
+    }
+    calculator.calculate();
+  });
+
+  $("#box2").change(function() {
+    if (document.getElementById('box2').checked) {
+      calculator.userConfig.toggles.Laptop.theBool = true;
+    } else {
+      calculator.userConfig.toggles.Laptop.theBool = false;
+    }
+    calculator.calculate();
+  });
+
 })();
 
-
-$("#box0").change(function() {
-  if (document.getElementById('box0').checked) {
-    calculator.userConfig.toggles.Stipend.theBool = true;
-  } else {
-    calculator.userConfig.toggles.Stipend.theBool = false;
-  }
-  calculator.calculate();
-});
-
-$("#box1").change(function() {
-  if (document.getElementById('box1').checked) {
-    calculator.userConfig.toggles.Tuition.theBool = true;
-  } else {
-    calculator.userConfig.toggles.Tuition.theBool = false;
-  }
-  calculator.calculate();
-});
-
-$("#box2").change(function() {
-  if (document.getElementById('box2').checked) {
-    calculator.userConfig.toggles.Laptop.theBool = true;
-  } else {
-    calculator.userConfig.toggles.Laptop.theBool = false;
-  }
+$("#years").change(function() {
+  calculator.userConfig.timePeriod = Number($("#years").val());
   calculator.calculate();
 });
 
