@@ -265,21 +265,6 @@ window.onload = function() {
   window.myLine = new Chart(ctx, config);
 };
 
-
-$('#randomizeData').click(function() {
-  calculator.calculate();
-});
-/*$.each(config.data.datasets, function(i, dataset) {
-    dataset.data = dataset.data.map(function() {
-      return randomScalingFactor();
-    });
-
-  });
-
-  window.myLine.update();
-});
-*/
-
 $('#addDataset').click(function() {
   var newDataset = {
     label: 'Dataset ' + config.data.datasets.length,
@@ -295,37 +280,6 @@ $('#addDataset').click(function() {
     newDataset.data.push(randomScalingFactor());
   }
 
-  // Because config.data.dataset uses datasets that use randomize function
-  // this pushes one of those randomized ones, thus, randomizing again
-  // We need to pull from our own personal array if we want to push a new dataset.
   config.data.datasets.push(newDataset);
-  window.myLine.update();
-});
-
-$('#addData').click(function() {
-  if (config.data.datasets.length > 0) {
-    var month = MONTHS[config.data.labels.length % MONTHS.length];
-    config.data.labels.push(month);
-
-    $.each(config.data.datasets, function(i, dataset) {
-      dataset.data.push(randomScalingFactor());
-    });
-
-    window.myLine.update();
-  }
-});
-
-$('#removeDataset').click(function() {
-  config.data.datasets.splice(0, 1);
-  window.myLine.update();
-});
-
-$('#removeData').click(function() {
-  config.data.labels.splice(-1, 1); // remove the label first
-
-  config.data.datasets.forEach(function(dataset, datasetIndex) {
-    dataset.data.pop();
-  });
-
   window.myLine.update();
 });
