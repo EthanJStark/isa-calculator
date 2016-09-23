@@ -1,6 +1,6 @@
 ## Description
 
-Create an online calculator that allows a prospective Learners Guild applicant to determine various outcomes of opting in to the Income Share Agreement (ISA) and stipend. 
+Create an online calculator that allows a prospective Learners Guild applicant to determine various outcomes of opting in to the Income Share Agreement (ISA) and stipend.
 
 Customer: for deployment on Learnersguild.org
 User: a prospective applicant
@@ -11,11 +11,11 @@ _Why is this goal important? How is it useful? What questions will it raise?_
 
 This goal is important because it has an actual customer (Learners Guild) and actual users (prospective applicants). This is an opportunity to analyze and explore UX. How can one effectively, clearly, visually communicate these complex mathematical equations?
 
-For many applicants, the concept of an ISA is new, and the details around how it works and the financial implications can be confusing. 
+For many applicants, the concept of an ISA is new, and the details around how it works and the financial implications can be confusing.
 
-An example of a spreadsheet designed to run some of these calculations can be found [here](https://docs.google.com/spreadsheets/d/1QGhQJeezQwfytiS-WJ4WC3G8TjDxn-ia59ko-bWcYJY/edit?usp=sharing). 
+An example of a spreadsheet designed to run some of these calculations can be found [here](https://docs.google.com/spreadsheets/d/1QGhQJeezQwfytiS-WJ4WC3G8TjDxn-ia59ko-bWcYJY/edit?usp=sharing).
 
-This calculator can help applicants make informed decisions around the ISA and Living Allowance. 
+This calculator can help applicants make informed decisions around the ISA and Living Allowance.
 Changing variables, like salary and amount of stipend, can result in thousands of dollars of difference in the amount of tuition paid.
 
 
@@ -36,7 +36,11 @@ Changing variables, like salary and amount of stipend, can result in thousands o
 - [6] Git Logged - Readable and clean with clear, complete, professional commit messages
 - [10] Not Commented - Unless truly necessary.
 
-
+![](project-screenshots/jekyll-integration.png)
+![](project-screenshots/isolated-1.png)
+![](project-screenshots/isolated-2.png)
+![](project-screenshots/isolated-3.png)
+![](project-screenshots/isolated-4.png)
 
 
 ---
