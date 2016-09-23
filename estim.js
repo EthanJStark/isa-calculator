@@ -190,7 +190,7 @@ var config = {
     responsive: true,
     title: {
       display: true,
-      text: "ISA Takehome Calculator"
+      text: "ISA Takehome Estimator"
     },
     tooltips: {
       mode: 'label',
