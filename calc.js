@@ -143,6 +143,14 @@ var calculator = {
     i++;
   }
 
+  $("<p>Number of Years</p>").appendTo(".DynamicInput");
+    var $inputYears = $("<input type='text' id='years'></input>").appendTo(".DynamicInput");
+
+  $("#years").change(function() {
+    calculator.timePeriod = Number($("#years").val());
+    calculator.calculate();
+  });
+
   $("#box0").change(function() {
     if (document.getElementById('box0').checked) {
       calculator.userConfig.toggles.Stipend.theBool = true;
